@@ -248,6 +248,17 @@ async function modalInfo(Data) {
     mName.textContent = `${pokeData.name} N.${pokeData.id}`;
     modalBody.appendChild(mName);
 
+    // EASTER EGG =================
+
+    if (pokeData.id === 67) {
+        const easterEgg = document.createElement('img');
+        easterEgg.src = 'Recursos/67.gif';
+        easterEgg.alt = 'Mi GIF animado';
+        easterEgg.width = 300;
+        easterEgg.height = 200;
+        modalBody.appendChild(easterEgg);
+    }
+
     // IMG MODAL ========================
     const mImg = document.createElement('img');
     mImg.src = pokeData.sprites.front_default;

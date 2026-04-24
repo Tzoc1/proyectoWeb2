@@ -3,19 +3,11 @@
 ║                     Semestre 4 - Programación Web                          ║
 ╚════════════════════════════════════════════════════════════════════════════╝
 
-📁 UBICACIÓN DEL PROYECTO:
-/Desarrollo web/Parcial 2/Proyecto/
-
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 1. INDEX (PÁGINA DE LOGIN)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 📄 Archivo: index.html / index.js
-
-✨ MEJORA REALIZADA:
-   - El botón SUBMIT ahora redirige automáticamente a catalogo.html
-   - Se guarda el usuario y contraseña en localStorage
-   - Se muestra el nombre de usuario en la topbar
 
 🔧 CÓMO FUNCIONA:
    - Cuando el usuario completa el formulario y da submit, se ejecuta la
@@ -30,25 +22,25 @@
 
 📄 Archivos: catalogo.html / catalogo.js / styles.css
 
-✨ MEJORAS REALIZADAS:
+Novedades Realizadas:
 
-  a) COLORES POR TIPO DE POKÉMON
+   1. COLORES POR TIPO DE POKÉMON
      - Se agregaron 18 clases CSS (.type-normal, .type-fire, etc.)
      - Cada tipo tiene su color oficial (ej: fuego = naranja, agua = azul)
      - Los colores se aplican automáticamente en los spans de tipo
 
-  b) FILTROS DE TIPO Y GENERACIÓN
+   2. FILTROS DE TIPO Y GENERACIÓN
      - Select superior para filtrar por tipo (18 opciones)
      - Select para filtrar por generación (Gen I - IX)
      - Funcionan de forma independiente o combinada
      - Interfaz limpia y responsiva
 
-  c) INFORMACIÓN DE GENERACIÓN EN MODAL
+   3. INFORMACIÓN DE GENERACIÓN EN MODAL
      - Se muestra la generación a la que pertenece cada pokémon
      - Formato: "Gen I", "Gen II", etc.
      - Se obtiene de la API de especies de Pokémon
 
-  d) BARRAS DE PROGRESO PARA STATS
+   4. BARRAS DE PROGRESO PARA STATS
      - En el modal, cada stat muestra una barra de progreso visual
      - Los colores varían según el valor (rojo: bajo, verde: alto)
      - El número del stat aparece al lado de la barra
@@ -73,7 +65,7 @@
 
 📄 Archivos: equipo.html / equipo.js / styles.css
 
-✨ MEJORAS REALIZADAS:
+Novedades Realizadas:
 
   a) SLOTS VISIBLES
      - Se muestran 6 slots de equipo en todo momento (incluso vacíos)
@@ -99,12 +91,12 @@
    - Funciona offline si los pokémons ya están guardados
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-4. MOVIMIENTOS (ITEMS)
+4. MOVIMIENTOS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-📄 Archivos: items.html / items.js / styles.css
+📄 Archivos: movimientos.html / movimientos.js / styles.css
 
-✨ MEJORAS REALIZADAS:
+Novedades Realizadas:
 
   a) ESTRUCTURA TIPO CATÁLOGO
      - Grid de movimientos en cards (como catálogo)
@@ -147,15 +139,15 @@
 6. ESTILOS CSS (DARK MODE & LIGHT MODE)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-📄 Archivo: styles.css
+📄 Archivo: darkmode.js / styles.css
 
-✨ CARACTERÍSTICAS:
+1. CARACTERÍSTICAS:
    - Variables CSS para light mode y dark mode
    - Cambio automático de colores con clase .darkmode
    - Todos los módulos responden a los cambios de tema
    - Colores consistentes en toda la aplicación
 
-🔧 CÓMO FUNCIONA:
+2. CÓMO FUNCIONA:
    - Botón de tema en topbar (sol/luna)
    - Click del botón agrega/quita la clase .darkmode a <html>
    - CSS usa variables para cambiar colores automáticamente
@@ -164,30 +156,6 @@
      * Cards de búsqueda en equipo
      * Grid de movimientos
      * Filtros de catálogo
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📊 RESUMEN DE ARCHIVOS
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-HTML:
-  ✓ index.html          - Página de login
-  ✓ catalogo.html       - Pokedex con filtros
-  ✓ equipo.html         - Gestor de equipo (6 pokémons)
-  ✓ items.html          - Buscador de movimientos
-  ✓ busqueda.html       - Búsqueda individual de pokémons
-  (También hay referencias a estas páginas)
-
-JavaScript:
-  ✓ index.js            - Login y redirección
-  ✓ catalogo.js         - Catálogo con scroll infinito y filtros
-  ✓ equipo.js           - Gestión de equipo con localStorage
-  ✓ items.js            - Catálogo de movimientos
-  ✓ busqueda.js         - Búsqueda individual
-  ✓ darkmode.js         - Cambio de tema
-  ✓ topbar.js           - Actualización de usuario
-
-CSS:
-  ✓ styles.css          - Estilos unificados (light/dark mode)
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 🔌 API UTILIZADA
@@ -204,7 +172,7 @@ PokéAPI (https://pokeapi.co/api/v2/)
   - /move/{id|name}                - Detalles de movimiento
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-💡 CARACTERÍSTICAS TÉCNICAS
+CARACTERÍSTICAS TÉCNICAS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ✓ Scroll Infinito (Intersection Observer API)
@@ -215,20 +183,6 @@ PokéAPI (https://pokeapi.co/api/v2/)
 ✓ CSS Grid y Flexbox para layouts responsivos
 ✓ Variables CSS para tema oscuro/claro
 ✓ Transiciones y animaciones suaves
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🚀 CÓMO USAR
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-1. Abrir index.html en un navegador
-2. Completar cualquier usuario/contraseña (se valida automáticamente)
-3. Hacer click en "Submit" para ir a Catálogo
-4. Navegar entre:
-   - Pokedex: Ver pokémons con filtros por tipo y generación
-   - Equipo: Crear tu equipo de 6 pokémons con apodos
-   - Búsqueda: Buscar pokémons individuales
-   - Movimientos: Ver detalles de movimientos y qué pokémons los aprenden
-5. Cambiar tema con el botón de sol/luna en la topbar
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 📌 NOTAS IMPORTANTES
@@ -242,5 +196,9 @@ PokéAPI (https://pokeapi.co/api/v2/)
 - Los colores de tipo se aplican automáticamente sin necesidad de mantenimiento
 
 ═══════════════════════════════════════════════════════════════════════════════
-Fin de la documentación - Proyecto completamente funcional ✓
+Fin de la documentación
 ═══════════════════════════════════════════════════════════════════════════════
+
+Easter egg
+
+      1. Pokemon 67
