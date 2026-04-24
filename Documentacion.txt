@@ -17,7 +17,7 @@
      3. Redirige a catalogo.html con window.location.href
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-2. CATÁLOGO (POKEDEX)
+2. CATÁLOGO (POKEDEX) EASTER EGG EN 67
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 📄 Archivos: catalogo.html / catalogo.js / styles.css
@@ -97,6 +97,476 @@ Novedades Realizadas:
 📄 Archivos: movimientos.html / movimientos.js / styles.css
 
 Novedades Realizadas:
+   - Catálogo de movimientos de Pokémon
+   - Carga con scroll infinito
+   - Modal con información completa del movimiento
+   - Tipos de movimiento con colores
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+5. DARKMODE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📄 Archivo: darkmode.js
+
+   - Sistema de tema oscuro/claro persistente
+   - Se guarda la preferencia en localStorage
+   - Se aplica automáticamente al cargar la página
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+
+
+
+╔════════════════════════════════════════════════════════════════════════════╗
+║                         REFERENCIA DE FUNCIONES                           ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📄 INDEX.JS - MÓDULO DE AUTENTICACIÓN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔧 usuario(e)
+   Descripción: Maneja el envío del formulario de login
+   Parámetros:
+      - e: Evento del formulario (previene reload)
+   Funcionalidad:
+      1. Obtiene el usuario y contraseña del formulario
+      2. Guarda ambos en localStorage (claves 'User' y 'Password')
+      3. Muestra alerta de éxito
+      4. Redirige a catalogo.html
+   Uso: Se ejecuta al hacer click en el botón de submit
+   
+───────────────────────────────────────────────────────────────────────────────
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📄 CATALOGO.JS - MÓDULO PRINCIPAL DE POKÉMON
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔧 capitalize(str)
+   Descripción: Convierte una cadena a mayúscula inicial
+   Parámetros:
+      - str: Cadena a convertir
+   Retorna: String con primera letra mayúscula y resto minúsculas
+   Uso: Se utiliza para formatear nombres de pokémons y tipos
+
+───────────────────────────────────────────────────────────────────────────────
+
+🔧 getStatColor(value)
+   Descripción: Retorna un color RGB basado en el valor del stat
+   Parámetros:
+      - value: Número del stat base (0-255)
+   Retorna: Código de color HEX
+      - Rojo (#FF6B6B) si value < 50
+      - Naranja (#FFA500) si value < 75
+      - Amarillo (#FFD700) si value < 100
+      - Verde claro (#90EE90) si value < 125
+      - Verde (#32CD32) si value >= 125
+   Uso: Para colorear las barras de progreso en el modal
+
+───────────────────────────────────────────────────────────────────────────────
+
+🔧 filterPokemons()
+   Descripción: Filtra pokémons por tipo y/o generación
+   Funcionalidad:
+      1. Obtiene valores de los select de filtro
+      2. Reinicia variables (offset, allPokemons)
+      3. Si hay filtro de tipo: consulta API por tipo
+      4. Si hay filtro de generación: consulta API por generación
+      5. Si hay ambos: aplica ambos filtros
+      6. Renderiza los resultados filtrados
+   Variables utilizadas:
+      - currentFilter: Almacena los filtros activos
+      - allPokemons: Array de pokémons filtrados
+
+───────────────────────────────────────────────────────────────────────────────
+
+🔧 filterByGeneration(pokemons, generation)
+   Descripción: Filtra un array de pokémons por generación
+   Parámetros:
+      - pokemons: Array de pokémons a filtrar
+      - generation: Número de generación (1-9)
+   Retorna: Array de pokémons que pertenecen a esa generación
+   Uso: Se utiliza dentro de filterPokemons()
+
+───────────────────────────────────────────────────────────────────────────────
+
+🔧 loadData()
+   Descripción: Carga pokémons con scroll infinito
+   Funcionalidad:
+      1. Verifica si ya está cargando (evita múltiples requests)
+      2. Consulta API con limit=25 y offset actual
+      3. Llama a renderTable() para mostrar los resultados
+      4. Incrementa offset para la próxima carga
+   Uso: Se ejecuta al iniciar y al hacer scroll al final de página
+
+───────────────────────────────────────────────────────────────────────────────
+
+🔧 renderTable(data)
+   Descripción: Renderiza las tarjetas de pokémons en el DOM
+   Parámetros:
+      - data: Array de pokémons desde la API
+   Funcionalidad:
+      1. Muestra skeletons mientras carga
+      2. Obtiene datos completos de cada pokémon
+      3. Crea una tarjeta (div.card) con:
+         - Nombre y número del pokémon
+         - Imagen
+         - Tipos con colores
+         - Botones "Ver más" y "+"
+      4. Agrega al contenedor principal (tablaDinamica)
+
+───────────────────────────────────────────────────────────────────────────────
+
+🔧 renderFilteredTable(data)
+   Descripción: Renderiza pokémons filtrados (similar a renderTable)
+   Parámetros:
+      - data: Array de pokémons filtrados
+   Diferencias:
+      - No muestra skeletons
+      - Recibe pokémons ya procesados
+      - Se usa para resultados de filtros
+
+───────────────────────────────────────────────────────────────────────────────
+
+🔧 modalInfo(Data)
+   Descripción: Abre un modal con información completa del pokémon
+   Parámetros:
+      - Data: Objeto pokémon completo desde API
+   Contenido del Modal:
+      1. Nombre y número (#)
+      2. Easter egg especial para Chansey (ID 67)
+      3. Imagen del pokémon
+      4. Tipos con colores
+      5. Habilidades
+      6. Stats con barras de progreso de colores
+      7. Altura y peso
+      8. Sprites (Front/Back, Normal/Shiny)
+      9. Generación (ej: Gen I, Gen II)
+      10. Cadena de evoluciones (1º, 2º, 3º nivel)
+      11. Movimientos disponibles
+   APIs utilizadas:
+      - pokemon data (ya tiene)
+      - species data (para generación y evoluciones)
+      - evolution_chain (para todas las evoluciones)
+
+───────────────────────────────────────────────────────────────────────────────
+
+🔧 addToTeam(pokemon)
+   Descripción: Agrega un pokémon al equipo (guardado en localStorage)
+   Parámetros:
+      - pokemon: Objeto pokémon completo
+   Validaciones:
+      - Verifica que no haya más de 6 pokémons
+      - Evita duplicados
+   Funcionalidad:
+      1. Obtiene equipo actual de localStorage
+      2. Si es válido, lo agrega al array
+      3. Guarda el array actualizado en localStorage
+      4. Muestra mensaje de confirmación
+
+───────────────────────────────────────────────────────────────────────────────
+
+🔧 showSkeletons(count)
+   Descripción: Muestra placeholders de carga (skeleton loaders)
+   Parámetros:
+      - count: Número de skeletons a mostrar (default 5)
+   Funcionalidad:
+      - Crea divs con clase 'skeleton-card' para simular carga
+      - Se reemplazan cuando los datos reales llegan
+
+───────────────────────────────────────────────────────────────────────────────
+
+🔧 Sentinel (Intersection Observer)
+   Descripción: Detecta cuando el usuario llega al final de página
+   Funcionalidad:
+      - Elemento invisible al final del contenedor
+      - Cuando entra en viewport: ejecuta loadData()
+      - Permite scroll infinito sin necesidad de botón
+
+───────────────────────────────────────────────────────────────────────────────
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📄 EQUIPO.JS - MÓDULO DE GESTIÓN DE EQUIPO POKÉMON
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔧 capitalize(str)
+   Descripción: Convierte una cadena a mayúscula inicial
+   Parámetros:
+      - str: Cadena a convertir
+   Retorna: String formateado
+   Nota: Función duplicada (igual a la de catalogo.js)
+
+───────────────────────────────────────────────────────────────────────────────
+
+🔧 loadTeam()
+   Descripción: Carga el equipo guardado del localStorage
+   Funcionalidad:
+      1. Obtiene 'pokemon_team' de localStorage
+      2. Si existe: parsea JSON y lo asigna a la variable 'team'
+      3. Ejecuta renderTeam() para mostrar
+      4. Si no existe: ejecuta renderEmptyTeam()
+
+───────────────────────────────────────────────────────────────────────────────
+
+🔧 renderEmptyTeam()
+   Descripción: Renderiza 6 slots vacíos iniciales
+   Funcionalidad:
+      - Crea 6 divs con clase 'empty-slot'
+      - Cada uno muestra "Slot X - Vacío"
+      - Se ejecuta al iniciar si no hay equipo guardado
+
+───────────────────────────────────────────────────────────────────────────────
+
+🔧 saveTeam()
+   Descripción: Guarda el equipo actual en localStorage
+   Funcionalidad:
+      - Convierte array 'team' a JSON
+      - Guarda en localStorage con clave 'pokemon_team'
+
+───────────────────────────────────────────────────────────────────────────────
+
+🔧 renderTeam()
+   Descripción: Renderiza los pokémons del equipo actual
+   Funcionalidad:
+      1. Limpia el contenedor de equipo
+      2. Para cada pokémon en 'team':
+         - Muestra imagen
+         - Muestra nombre (y apodo si existe)
+         - Botón "Apodo" para editar
+         - Botón "Quitar" para eliminar
+      3. Completa con slots vacíos hasta 6
+      4. Actualiza contador (X/6)
+
+───────────────────────────────────────────────────────────────────────────────
+
+🔧 addToTeam(pokemon)
+   Descripción: Agrega un pokémon al equipo
+   Parámetros:
+      - pokemon: Objeto pokémon completo
+   Validaciones:
+      - Máximo 6 pokémons
+      - No permite duplicados
+   Funcionalidad:
+      1. Verifica que no esté lleno
+      2. Verifica que no sea duplicado
+      3. Agrega a array 'team'
+      4. Guarda en localStorage
+      5. Renderiza nuevamente
+      6. Limpia búsqueda
+      7. Muestra alerta de confirmación
+
+───────────────────────────────────────────────────────────────────────────────
+
+🔧 removePokemon(index)
+   Descripción: Elimina un pokémon del equipo
+   Parámetros:
+      - index: Índice del pokémon a eliminar (0-5)
+   Funcionalidad:
+      1. Remueve el pokémon del array 'team'
+      2. Guarda cambios en localStorage
+      3. Renderiza equipo nuevamente
+
+───────────────────────────────────────────────────────────────────────────────
+
+🔧 setNickname(index)
+   Descripción: Asigna o edita un apodo a un pokémon
+   Parámetros:
+      - index: Índice del pokémon (0-5)
+   Funcionalidad:
+      1. Abre prompt solicitando apodo
+      2. Valida longitud máxima (15 caracteres)
+      3. Asigna el apodo a team[index].nickname
+      4. Guarda en localStorage
+      5. Renderiza equipo
+
+───────────────────────────────────────────────────────────────────────────────
+
+🔧 searchPokemons(query)
+   Descripción: Busca un pokémon por nombre/ID en tiempo real
+   Parámetros:
+      - query: Nombre o ID del pokémon (string)
+   Funcionalidad:
+      1. Si query está vacío: limpia resultados
+      2. Muestra "Buscando..." mientras consulta
+      3. Consulta API de Pokémon individual
+      4. Si existe: renderiza tarjeta de resultado con:
+         - Imagen
+         - Nombre y número
+         - Tipos con colores
+         - Botón "Añadir a Equipo"
+      5. Si no existe: muestra "Pokémon no encontrado"
+   Nota: Búsqueda más rápida que filtros globales
+
+───────────────────────────────────────────────────────────────────────────────
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📄 BUSQUEDA.JS - MÓDULO DE BÚSQUEDA DE POKÉMON
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔧 fetchpokemon(pokemon)
+   Descripción: Obtiene datos completos de un pokémon desde la API
+   Parámetros:
+      - pokemon: Nombre o ID del pokémon (string/number)
+   Funcionalidad:
+      1. Realiza 2 consultas en paralelo:
+         - API de pokémon base (stats, tipos, movimientos)
+         - API de especies (generación, evoluciones)
+      2. Si ambas consultas son exitosas: llama cambiarpokemon()
+      3. Si hay error: muestra alerta "Pokémon no encontrado"
+   Ventaja: Promise.all permite paralelizar las requests
+
+───────────────────────────────────────────────────────────────────────────────
+
+🔧 buscarpokemon()
+   Descripción: Obtiene el valor del input y ejecuta la búsqueda
+   Funcionalidad:
+      1. Obtiene valor del input con ID 'buscar'
+      2. Lo convierte a minúsculas y elimina espacios
+      3. Si no está vacío: llama a fetchpokemon()
+
+───────────────────────────────────────────────────────────────────────────────
+
+🔧 cambiarpokemon(pokemon, species)
+   Descripción: Actualiza el DOM con los datos del pokémon buscado
+   Parámetros:
+      - pokemon: Datos del pokémon (de API pokemon)
+      - species: Datos de especies (para generación)
+   Funcionalidad:
+      1. Actualiza elementos del DOM:
+         - Nombre del pokémon
+         - Imagen (sprite frontal)
+         - ID (#)
+         - Tipo primario y secundario
+         - Generación
+         - Stats (HP, Attack, Defense, Sp. Atk, Sp. Def, Speed)
+         - Altura (convertida a metros)
+         - Peso (convertido a kg)
+   Nota: Crea una vista formateada legible del pokémon
+
+───────────────────────────────────────────────────────────────────────────────
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📄 MOVIMIENTOS.JS - MÓDULO DE CATÁLOGO DE MOVIMIENTOS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔧 capitalize(str)
+   Descripción: Convierte una cadena a mayúscula inicial
+   Parámetros:
+      - str: Cadena a convertir
+   Retorna: String formateado
+   Nota: Función duplicada (reutilizada en múltiples módulos)
+
+───────────────────────────────────────────────────────────────────────────────
+
+🔧 loadMoves()
+   Descripción: Carga movimientos con scroll infinito
+   Funcionalidad:
+      1. Verifica si ya está cargando (evita múltiples requests)
+      2. Consulta API con limit=20 y offset actual
+      3. Llama a renderMoves() con los resultados
+      4. Incrementa offset para la próxima carga
+   Offset: Comienza en 0, aumenta de 20 en 20
+   Nota: Similar a loadData() de catalogo.js
+
+───────────────────────────────────────────────────────────────────────────────
+
+🔧 renderMoves(moves)
+   Descripción: Renderiza las tarjetas de movimientos
+   Parámetros:
+      - moves: Array de movimientos desde API
+   Funcionalidad para cada movimiento:
+      1. Crea un div con clase 'move-card'
+      2. Muestra:
+         - Nombre del movimiento
+         - Tipo (con color específico)
+         - Potencia (power)
+         - Precisión (accuracy)
+         - Botón "Ver más"
+      3. Agrega al contenedor (itemsContainer)
+   Detalle: Usa Promise.all para obtener datos completos de cada movimiento
+
+───────────────────────────────────────────────────────────────────────────────
+
+🔧 showMoveModal(moveData)
+   Descripción: Abre un modal con información completa del movimiento
+   Parámetros:
+      - moveData: Objeto movimiento desde API
+   Contenido del Modal:
+      1. Nombre del movimiento
+      2. Tipo (con color)
+      3. Tabla con información:
+         - Potencia (poder del ataque)
+         - Precisión (%)
+         - PP (Points/Poder Político del movimiento)
+         - Categoría (Physical/Special/Status)
+         - Descripción del efecto
+   Tabla: Usa clase 'teibol' para estilo
+
+───────────────────────────────────────────────────────────────────────────────
+
+🔧 Sentinel (Intersection Observer)
+   Descripción: Detecta scroll al final para cargar más movimientos
+   Funcionalidad:
+      - Igual al sistema de catalogo.js
+      - Ejecuta loadMoves() cuando se detecta
+
+───────────────────────────────────────────────────────────────────────────────
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📄 DARKMODE.JS - MÓDULO DE TEMA OSCURO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔧 enableDarkmode()
+   Descripción: Activa el modo oscuro
+   Funcionalidad:
+      1. Agrega clase 'darkmode' al body
+      2. Guarda 'active' en localStorage bajo clave 'darkmode'
+   Persistencia: El tema se mantiene entre recargas
+
+───────────────────────────────────────────────────────────────────────────────
+
+🔧 disableDarkmode()
+   Descripción: Desactiva el modo oscuro
+   Funcionalidad:
+      1. Remueve clase 'darkmode' del body
+      2. Limpia localStorage (guarda 'null')
+
+───────────────────────────────────────────────────────────────────────────────
+
+🔧 Event Listener (theme-switch)
+   Descripción: Alterna entre modo oscuro y claro
+   Trigger: Click en elemento con ID 'theme-switch'
+   Funcionalidad:
+      1. Obtiene estado actual de localStorage
+      2. Si NO está activo: llama enableDarkmode()
+      3. Si está activo: llama disableDarkmode()
+   Persistencia: El estado se guarda automáticamente
+
+───────────────────────────────────────────────────────────────────────────────
+
+🔧 DOMContentLoaded Initialization
+   Descripción: Carga el tema guardado al iniciar
+   Funcionalidad:
+      - Si localStorage['darkmode'] === 'active': aplica enableDarkmode()
+      - Asegura que el tema se mantenga entre sesiones
+
+───────────────────────────────────────────────────────────────────────────────
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📄 TOPBAR.JS - MÓDULO DE BARRA SUPERIOR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔧 actualizarCuenta()
+   Descripción: Actualiza el nombre de usuario en la barra superior
+   Funcionalidad:
+      1. Obtiene elemento con ID 'cuenta'
+      2. Busca 'User' en localStorage
+      3. Si existe: muestra el nombre del usuario
+      4. Si no existe: muestra "Sin usuario"
+      5. Agrega clase 'user' para estilo
+   Ejecutado: Al evento DOMContentLoaded (cuando carga la página)
+
+───────────────────────────────────────────────────────────────────────────────
 
   a) ESTRUCTURA TIPO CATÁLOGO
      - Grid de movimientos en cards (como catálogo)
@@ -198,7 +668,3 @@ CARACTERÍSTICAS TÉCNICAS
 ═══════════════════════════════════════════════════════════════════════════════
 Fin de la documentación
 ═══════════════════════════════════════════════════════════════════════════════
-
-Easter egg
-
-      1. Pokemon 67
