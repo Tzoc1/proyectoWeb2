@@ -53,7 +53,21 @@ async function filterPokemons() {
     try {
       const response = await fetch(`https://pokeapi.co/api/v2/generation/${generationFilter}`);
       const data = await response.json();
-      allPokemons = data.pokemon_species;
+      
+      // Obtener los IDs de cada especie
+      const speciesPromises = data.pokemon_species.map(species =>
+        fetch(species.url).then(res => res.json())
+      );
+      const speciesData = await Promise.all(speciesPromises);
+      
+      // Crear lista de pokémons con sus IDs
+      allPokemons = speciesData
+        .filter(spec => spec.varieties && spec.varieties.length > 0)
+        .map(spec => ({
+          name: spec.varieties[0].pokemon.name,
+          url: spec.varieties[0].pokemon.url
+        }));
+      
       renderFilteredTable(allPokemons.slice(0, flimit));
     } catch (error) {
       console.error('Error filtrando por generación:', error);
@@ -163,7 +177,7 @@ async function renderTable(data) {
 
 async function renderFilteredTable(data) {
     const promises = data.map(pokemon =>
-        fetch(pokemon.url || `https://pokeapi.co/api/v2/pokemon?limit=${flimit}/${pokemon.name}`).then(res => res.json())   
+        fetch(pokemon.url || `https://pokeapi.co/api/v2/pokemon/${pokemon.name}`).then(res => res.json())
     );
     console.log('here');
     const results = await Promise.all(promises);
