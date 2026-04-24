@@ -249,7 +249,6 @@ async function modalInfo(Data) {
     modalBody.appendChild(mName);
 
     // EASTER EGG =================
-
     if (pokeData.id === 67) {
         const easterEgg = document.createElement('img');
         easterEgg.src = 'Recursos/67.gif';
